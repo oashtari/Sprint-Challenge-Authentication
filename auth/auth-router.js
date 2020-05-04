@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const Users = require('../Users/users-model');
-const { jwtsecret } = require('../secrets');
+const { jwtSecret } = require('../secrets');
 
 
 router.post('/register', (req, res) => {
@@ -26,14 +26,15 @@ router.post('/login', (req, res) => {
   let { username, password } = req.body;
 
   Users.findBy({ username })
-    // .first()
+    .first()
     .then(user => {
-      console.log('user', user)
-      console.log('password', password)
+
+
       if (user && bcrypt.compareSync(password, user.password)) {
+        console.log('username', user.username)
 
         const token = generateToken(user);
-        console.log('token:', token)
+
         res.status(200).json({ message: `Welcome ${user.username}`, token })
 
       } else {
@@ -45,6 +46,7 @@ router.post('/login', (req, res) => {
     .catch(err => res.status(500).json(err))
 });
 
+
 function generateToken(user) {
   const payload = {
     username: user.username
@@ -52,7 +54,8 @@ function generateToken(user) {
   const options = {
     expiresIn: '1h'
   }
-  return jwt.sign(payload, jwtsecret, options)
+  console.log(payload, jwtSecret, options, 'check token vars')
+  return jwt.sign(payload, jwtSecret, options)
 }
 
 module.exports = router;
