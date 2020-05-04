@@ -31,7 +31,6 @@ router.post('/login', (req, res) => {
 
 
       if (user && bcrypt.compareSync(password, user.password)) {
-        console.log('username', user.username)
 
         const token = generateToken(user);
 
@@ -54,7 +53,6 @@ function generateToken(user) {
   const options = {
     expiresIn: '1h'
   }
-  console.log(payload, jwtSecret, options, 'check token vars')
   return jwt.sign(payload, jwtSecret, options)
 }
 
