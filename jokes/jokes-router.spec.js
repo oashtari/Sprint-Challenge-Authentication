@@ -6,6 +6,7 @@ const db = require('../database/dbConfig')
 
 
 describe("GET /api/jokes", () => {
+
     it("should return 400 without token in header", () => {
         return request(server)
             .get("/api/jokes")
@@ -19,15 +20,13 @@ describe("GET /api/jokes", () => {
         const newUser = { username: "gunner", password: "dogAgain" };
         const { username, password } = newUser;
 
-        beforeEach(async () => {
-            await db("users").insert(newUser); // Add user
-        });
+
 
         const loggedIn = await request(server)
             .post("/api/auth/login")
             .send({ username, password });
 
-        const { token } = loggedIn.body; // Grab token from login
+        const { token } = loggedIn.body;
 
         return request(server)
             .get("/api/jokes")

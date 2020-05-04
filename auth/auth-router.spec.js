@@ -10,7 +10,7 @@ describe("POST /register", () => {
     const { username } = newUser;
 
     beforeEach(async () => {
-        await db('users').truncate(); // Empty rows, reset ID back to 1
+        await db('users').truncate();
     });
 
     it("should return 200 after registering", async () => {
